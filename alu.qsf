@@ -47,13 +47,6 @@ set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
 set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS "AS INPUT TRI-STATED"
-set_global_assignment -name VERILOG_FILE alu.v
-set_global_assignment -name VERILOG_FILE adder.v
-set_global_assignment -name VERILOG_FILE shifter.v
-set_global_assignment -name VERILOG_FILE logical.v
-set_global_assignment -name VERILOG_FILE control.v
-set_global_assignment -name VERILOG_FILE muxCI.v
-set_global_assignment -name VERILOG_FILE hex_to_seven_seg.v
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
@@ -150,3 +143,11 @@ set_global_assignment -name EDA_DESIGN_INSTANCE_NAME UUT -section_id alu_test
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME alu_test -section_id alu_test
 set_global_assignment -name EDA_TEST_BENCH_FILE alu_test.v -section_id alu_test
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VERILOG_FILE two_to_one_mux.v
+set_global_assignment -name VERILOG_FILE alu.v
+set_global_assignment -name VERILOG_FILE adder.v
+set_global_assignment -name VERILOG_FILE shifter.v
+set_global_assignment -name VERILOG_FILE logical.v
+set_global_assignment -name VERILOG_FILE control.v
+set_global_assignment -name VERILOG_FILE muxCI.v
+set_global_assignment -name VERILOG_FILE hex_to_seven_seg.v
