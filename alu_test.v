@@ -114,14 +114,9 @@ module alu_test();
 	 for(A = 8'd0; A < 8'd8; A = A + 8'd1) begin
 		for (B = 8'd0; B < 8'd8; B = B + 8'd1) begin
 			#100
-			 $display("MSIM>");
-    if(Y == (A & B) && C == 1'b0 && V == 1'b0 && Z == (Y == 8'b0)) begin
-      $display("MSIM> AND (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
-    end
-    else begin
-      $display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 82), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 1), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
-    end
-    $display("MSIM>");
+			if (~(Y == (A & B) && C == 1'b0 && V == 1'b0 && Z == (Y == 8'b0))) begin
+				$display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 82), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 1), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+			end
 		end
 	 end
 	 
