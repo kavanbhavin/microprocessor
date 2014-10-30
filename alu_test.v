@@ -14,7 +14,13 @@
 // name of the top-level module; for us it should always be <module name>_test
 // this top-level module should have no inputs or outputs; only internal signals are needed
 module alu_test();
-
+	 localparam ADD = 3'd0;
+	 localparam SUB = 3'd1;
+	 localparam SRA = 3'd2;
+	 localparam SRL = 3'd3;
+	 localparam SLL = 3'd4;
+	 localparam AND = 3'd5;
+	 localparam OR = 3'd6;
   // for all of your input pins, declare them as type reg, and name them identically to the pins
   reg  [7:0]  A;
   reg  [7:0]  B;
@@ -102,8 +108,23 @@ module alu_test();
     
     
     // ADD YOUR TEST CASES BELOW THIS LINE
-    
-    
+    //following local parameters should simplify writing test cases
+   
+	 OP = AND;
+	 for(A = 8'd0; A < 8'd8; A = A + 8'd1) begin
+		for (B = 8'd0; B < 8'd8; B = B + 8'd1) begin
+			#100
+			 $display("MSIM>");
+    if(Y == (A & B) && C == 1'b0 && V == 1'b0 && Z == (Y == 8'b0)) begin
+      $display("MSIM> AND (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
+    end
+    else begin
+      $display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 82), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 1), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+    end
+    $display("MSIM>");
+		end
+	 end
+	 
     
     // ADD YOUR TEST CASES ABOVE THIS LINE
     
