@@ -20,17 +20,87 @@ module alu(A, B, OP, Y, C, V, N, Z, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HE
 
 
   // ADD YOUR CODE BELOW THIS LINE
+  wire LA;
+  wire LR;
+  wire LOP;
+  wire BSEL;
+  wire [7:0] B_IN;
+  wire CSEL;
+  wire CARRY_IN;
+  wire [7:0] logic_out;
+  wire [7:0] shifter_out;
+  wire [1:0] OSEL;
+  wire logic_c;
+  wire shifter_c;
+  wire logic_v;
+  wire shifter_v;
+  assign N = Y[1] ? 1'b1 : 1'b0;
+  assign Z = (Y == 8'd0) ? 1'b1 : 1'b0;
+  
+  two_to_one_mux #(.DATA_WIDTH(8)) bselect(
+		.I0(B),
+		.I1(~B),
+		.SELECT(BSEL),
+		.DATA(B_IN)
+  );
+  
+  two_to_one_mux #(.DATA_WIDTH(1)) ciselect(
+		.I0(1'b0),
+		.I1(1'b0),
+		.SELECT(CSEL),
+		.DATA(CARRY_IN)
+  );
+  
+  three_to_one_mux #(.DATA_WIDTH(8)) outselect(
+		.I0(),
+		.I1(shifter_out),
+		.I2(logic_out),
+		.SELECT(OSEL),
+		.OUT(Y)
+  );
+  
+  three_to_one_mux #(.DATA_WIDTH(1)) coutselect(
+		.I0(),
+		.I1(shifter_c),
+		.I2(logic_c),
+		.SELECT(OSEL),
+		.OUT(C)
+  );
+  
+  three_to_one_mux #(.DATA_WIDTH(1)) voutselect(
+		.I0(),
+		.I1(shifter_v),
+		.I2(logic_v),
+		.SELECT(OSEL),
+		.OUT(V)
+  );
   
   control freak(
-    // port mappings go here
+    .OP(OP), 
+	 .CISEL(CSEL), 
+	 .BISEL(BSEL), 
+	 .OSEL(OSEL),
+	 .SHIFT_LA(LA), 
+	 .SHIFT_LR(LR), 
+	 .LOGICAL_OP(LOP)
   );
-
+	
   logical paradox(
-    // port mappings go here
+    .A(A), 
+	 .B(B_IN),
+	 .OP(LOP),
+	 .Y(logic_out),
+	 .C(logic_c),
+	 .V(logic_v)
   );  
   
   shifter iDontGiveAShift(
-    // port mappings go here
+    .A(A), 
+	 .LA(LA), 
+	 .LR(LR), 
+	 .Y(shifter_out), 
+	 .C(shifter_c),
+	 .V(shifter_v)
   );
 
   // ADD YOUR CODE ABOVE THIS LINE

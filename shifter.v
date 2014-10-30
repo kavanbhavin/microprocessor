@@ -1,4 +1,4 @@
-module shifter(A, LA, LR, Y, C); // add all inputs and outputs inside parentheses
+module shifter(A, LA, LR, Y, C, V); // add all inputs and outputs inside parentheses
 
   // inputs
   input [7:0] A;
@@ -8,12 +8,14 @@ module shifter(A, LA, LR, Y, C); // add all inputs and outputs inside parenthese
   // outputs
   output [7:0] Y;
   output C;
+  output V;
   
   // reg and internal variable definitions
   reg [7:0] Y;
   reg C;
   
   // implement module here
+  assign V = 1'b0;
   always @(*) begin
   if(~LR) begin
   //left direction so automatically we have to do logical shift left

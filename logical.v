@@ -1,4 +1,4 @@
-module logical(A, B, OP, Y);
+module logical(A, B, OP, Y, C, V);
  
 
   // inputs
@@ -8,10 +8,14 @@ module logical(A, B, OP, Y);
   
   // outputs
   output [7:0] Y;
+  output C;
+  output V;
   
   // reg and internal variable definitions
   
   // implement module here
   assign Y = OP ? A & B : A | B;
+  assign C = 1'b0;
+  assign V = 1'b0;
   
 endmodule
