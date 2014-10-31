@@ -310,7 +310,7 @@ module alu_test();
 	 
     A  = 8'b1;
     B  = 8'h12;
-    OP = SLL;
+    OP = SRL;
     
     #100;  // wait for input signals to propagate through circuit
     	 
@@ -436,11 +436,11 @@ module alu_test();
     #100;  // wait for input signals to propagate through circuit
     	 
     $display("MSIM>");
-    if(Y == 8'b0 && C == 1'b0 && V == 1'b0 && N == 1'b0 && Z == 1'b0) begin
+    if(Y == 8'b0 && C == 1'b0 && V == 1'b0 && N == 1'b0 && Z == 1'b1) begin
       $display("MSIM> AND (OP = %3b) is correct for A = %8b, B = %8b: Y = %8b, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
     end
     else begin
-      $display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %8b, B = %8b: Y = %8b (should be 00000000), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 0), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+      $display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %8b, B = %8b: Y = %8b (should be 00000000), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 0), Z = %1b (should be 1)", OP, A, B, Y, C, V, N, Z);
     end
     $display("MSIM>"); 	
 
@@ -453,17 +453,17 @@ module alu_test();
     #100;  // wait for input signals to propagate through circuit
     	 
     $display("MSIM>");
-    if(Y == 8'b0 && C == 1'b0 && V == 1'b0 && N == 1'b0 && Z == 1'b0) begin
+    if(Y == 8'b0 && C == 1'b0 && V == 1'b0 && N == 1'b0 && Z == 1'b1) begin
       $display("MSIM> AND (OP = %3b) is correct for A = %8b, B = %8b: Y = %8b, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
     end
     else begin
-      $display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %8b, B = %8b: Y = %8b (should be 00000000), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 0), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+      $display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %8b, B = %8b: Y = %8b (should be 00000000), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 0), Z = %1b (should be 1)", OP, A, B, Y, C, V, N, Z);
     end
     $display("MSIM>"); 		
 
 	 // AND: Check 1&1, N=1 for negative
 	 
-    A  = 8'b0;
+    A  = 8'hff;
     B  = 8'hff;
     OP = AND;
     
