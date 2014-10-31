@@ -385,7 +385,7 @@ module alu_test();
     #100;  // wait for input signals to propagate through circuit
     	 
     $display("MSIM>");
-    if(Y == 8'b00000101 && C == 1'b1 && V == 1'b0 && N == 1'b0 && Z == 1'b0) begin
+    if(Y == 8'b00000101 && C == 1'b0 && V == 1'b0 && N == 1'b0 && Z == 1'b0) begin
       $display("MSIM> AND (OP = %3b) is correct for A = %8b, B = %8b: Y = %8b, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
     end
     else begin
@@ -402,7 +402,7 @@ module alu_test();
     #100;  // wait for input signals to propagate through circuit
     	 
     $display("MSIM>");
-    if(Y == 8'b10100000 && C == 1'b1 && V == 1'b0 && N == 1'b1 && Z == 1'b0) begin
+    if(Y == 8'b10100000 && C == 1'b0 && V == 1'b0 && N == 1'b1 && Z == 1'b0) begin
       $display("MSIM> AND (OP = %3b) is correct for A = %8b, B = %8b: Y = %8b, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
     end
     else begin
