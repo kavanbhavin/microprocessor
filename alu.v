@@ -34,7 +34,7 @@ module alu(A, B, OP, Y, C, V, N, Z, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HE
   wire shifter_c;
   wire logic_v;
   wire shifter_v;
-  assign N = Y[1] ? 1'b1 : 1'b0;
+  assign N = Y[7] ? 1'b1 : 1'b0;
   assign Z = (Y == 8'd0) ? 1'b1 : 1'b0;
   
   two_to_one_mux #(.DATA_WIDTH(8)) bselect(
