@@ -136,8 +136,9 @@ module alu_test();
     
     // ADD YOUR TEST CASES BELOW THIS LINE
     //following local parameters should simplify writing test cases
-	 
-    /* For loop to be implemented later
+	 //All for loop cases don't run print anything unless they fail (to avoid hundreds of print statements)
+	 //Note these are extra for our own sake, the ones listed above are implemented below.
+	 //run AND on all possible valid inputs 
 	 OP = AND;
 	 for(A = 8'd0; A < 8'd8; A = A + 8'd1) begin
 		for (B = 8'd0; B < 8'd8; B = B + 8'd1) begin
@@ -147,8 +148,17 @@ module alu_test();
 			end
 		end
 	 end
-	 */
-	
+	 //run OR on all possible valid inputs
+	 OP = OR;
+	 for(A = 8'd0; A < 8'd8; A = A + 8'd1) begin
+		for (B = 8'd0; B < 8'd8; B = B + 8'd1) begin
+			#100
+			if (~(Y == (A | B) && C == 1'b0 && V == 1'b0 && Z == (Y == 8'b0))) begin
+				$display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 82), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 1), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+			end
+		end
+	 end
+	 
 	 /* // ****** 1. TEST ADD ******
 	 // Add: Check V=1 for proper overflow (add 2 positive), C=0 for carry out, N=1 for negative, Z!=0
 	 
