@@ -159,7 +159,7 @@ module alu_test();
 		end
 	 end
 	 
-	 /* // ****** 1. TEST ADD ******
+	 // ****** 1. TEST ADD ******
 	 // Add: Check V=1 for proper overflow (add 2 positive), C=0 for carry out, N=1 for negative, Z!=0
 	 
     A  = 8'h41;
@@ -203,11 +203,11 @@ module alu_test();
     #100;  // wait for input signals to propagate through circuit
     
     $display("MSIM>");
-    if(Y == 8'h20 && C == 1'b0 && V == 1'b0 && N == 1'b1 && Z == 1'b0) begin
+    if(Y == 8'h10 && C == 1'b1 && V == 1'b0 && N == 1'b0 && Z == 1'b0) begin
       $display("MSIM> ADD (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
     end
     else begin
-      $display("MSIM> ERROR: ADD (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 20), C = %1b (should be 1), V = %1b (should be 1), N = %1b (should be 0), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+      $display("MSIM> ERROR: ADD (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 10), C = %1b (should be 1), V = %1b (should be 0), N = %1b (should be 0), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
     end
     $display("MSIM>");  
 	 
@@ -220,14 +220,99 @@ module alu_test();
     #100;  // wait for input signals to propagate through circuit
     
     $display("MSIM>");
-    if(Y == 8'h0 && C == 1'b0 && V == 1'b0 && N == 1'b0 && Z == 1'b1) begin
+    if(Y == 8'h0 && C == 1'b1 && V == 1'b0 && N == 1'b0 && Z == 1'b1) begin
       $display("MSIM> ADD (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
     end
     else begin
-      $display("MSIM> ERROR: ADD (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 83), C = %1b (should be 1), V = %1b (should be 1), N = %1b (should be 0), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+      $display("MSIM> ERROR: ADD (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 0), C = %1b (should be 1), V = %1b (should be 0), N = %1b (should be 0), Z = %1b (should be 1)", OP, A, B, Y, C, V, N, Z);
     end
     $display("MSIM>");  	
-	 */
+	 
+	 // ****** 2. TEST SUB ******
+	 // SUB: Check V=1 for proper overflow (pos minus neg), C=0 for carry out, N=1 for negative, Z!=0
+	 
+    A  = 8'h41;
+    B  = 8'hbe;
+    OP = SUB;
+    
+    #100;  // wait for input signals to propagate through circuit
+    
+    $display("MSIM>");
+    if(Y == 8'h83 && C == 1'b0 && V == 1'b1 && N == 1'b1 && Z == 1'b0) begin
+      $display("MSIM> SUB (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
+    end
+    else begin
+      $display("MSIM> ERROR: SUB (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 83), C = %1b (should be 0), V = %1b (should be 1), N = %1b (should be 1), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+    end
+    $display("MSIM>"); 
+
+	 // SUB: Check V=1 for proper overflow (neg minus pos), C=1 for carry out, N=0 for negative, Z!=0
+	 
+    A  = 8'h81;
+    B  = 8'h7e;
+    OP = SUB;
+    
+    #100;  // wait for input signals to propagate through circuit
+    
+    $display("MSIM>");
+    if(Y == 8'h03 && C == 1'b1 && V == 1'b1 && N == 1'b0 && Z == 1'b0) begin
+      $display("MSIM> SUB (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
+    end
+    else begin
+      $display("MSIM> ERROR: SUB (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 03), C = %1b (should be 1), V = %1b (should be 1), N = %1b (should be 0), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+    end
+    $display("MSIM>");  
+ 
+	 // SUB: Check V=0 for proper overflow (neg minus neg), C=1 for carry out, N=1 for negative, Z!=0
+	 
+    A  = 8'hc1;
+    B  = 8'hb1;
+    OP = SUB;
+    
+    #100;  // wait for input signals to propagate through circuit
+    
+    $display("MSIM>");
+    if(Y == 8'h10 && C == 1'b1 && V == 1'b0 && N == 1'b0 && Z == 1'b0) begin
+      $display("MSIM> SUB (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
+    end
+    else begin
+      $display("MSIM> ERROR: SUB (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 10), C = %1b (should be 1), V = %1b (should be 0), N = %1b (should be 0), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+    end
+    $display("MSIM>");  
+	 
+	 // SUB: Check V=0 for proper overflow (pos minus pos), C=1 for carry out, N=1 for negative, Z!=0
+	 
+    A  = 8'h3f;
+    B  = 8'h4f;
+    OP = SUB;
+    
+    #100;  // wait for input signals to propagate through circuit
+    
+    $display("MSIM>");
+    if(Y == 8'hf0 && C == 1'b0 && V == 1'b0 && N == 1'b1 && Z == 1'b0) begin
+      $display("MSIM> SUB (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
+    end
+    else begin
+      $display("MSIM> ERROR: SUB (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be f0), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 1), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+    end
+    $display("MSIM>");  	 
+	 
+	 // SUB: Check Z=1 for A-B=0
+	 
+    A  = 8'h81;
+    B  = 8'h81;
+    OP = SUB;
+    
+    #100;  // wait for input signals to propagate through circuit
+    
+    $display("MSIM>");
+    if(Y == 8'h0 && C == 1'b1 && V == 1'b0 && N == 1'b0 && Z == 1'b1) begin
+      $display("MSIM> SUB (OP = %3b) is correct for A = %2h, B = %2h: Y = %2h, C = %1b, V = %1b, N = %1b, Z = %1b", OP, A, B, Y, C, V, N, Z);
+    end
+    else begin
+      $display("MSIM> ERROR: SUB (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 0), C = %1b (should be 1), V = %1b (should be 0), N = %1b (should be 0), Z = %1b (should be 1)", OP, A, B, Y, C, V, N, Z);
+    end
+    $display("MSIM>"); 
 	 
 	 // ****** 3. TEST SRA ******
 	 // SRA: Check C=0 for proper carry out, N=1 for negative
