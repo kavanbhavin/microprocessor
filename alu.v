@@ -29,11 +29,14 @@ module alu(A, B, OP, Y, C, V, N, Z, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HE
   wire CARRY_IN;
   wire [7:0] logic_out;
   wire [7:0] shifter_out;
+  wire [7:0] adder_out;
   wire [1:0] OSEL;
   wire logic_c;
   wire shifter_c;
+  wire adder_c;
   wire logic_v;
   wire shifter_v;
+  wire adder_v;
   assign N = Y[7] ? 1'b1 : 1'b0;
   assign Z = (Y == 8'd0) ? 1'b1 : 1'b0;
   
@@ -52,7 +55,7 @@ module alu(A, B, OP, Y, C, V, N, Z, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HE
   );
   
   three_to_one_mux #(.DATA_WIDTH(8)) outselect(
-		.I0(),
+		.I0(adder_out),
 		.I1(shifter_out),
 		.I2(logic_out),
 		.SELECT(OSEL),
@@ -60,7 +63,7 @@ module alu(A, B, OP, Y, C, V, N, Z, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HE
   );
   
   three_to_one_mux #(.DATA_WIDTH(1)) coutselect(
-		.I0(),
+		.I0(adder_c),
 		.I1(shifter_c),
 		.I2(logic_c),
 		.SELECT(OSEL),
@@ -68,7 +71,7 @@ module alu(A, B, OP, Y, C, V, N, Z, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HE
   );
   
   three_to_one_mux #(.DATA_WIDTH(1)) voutselect(
-		.I0(),
+		.I0(adder_v),
 		.I1(shifter_v),
 		.I2(logic_v),
 		.SELECT(OSEL),
@@ -102,6 +105,16 @@ module alu(A, B, OP, Y, C, V, N, Z, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HE
 	 .C(shifter_c),
 	 .V(shifter_v)
   );
+  
+  adder vipera(
+	 .A(A),
+	 .B(B_IN),
+	 .CI(CSEL),
+	 .Y(adder_out),
+	 .C(adder_c),
+	 .V(adder_v)
+  ); 
+  
 
   // ADD YOUR CODE ABOVE THIS LINE
 
