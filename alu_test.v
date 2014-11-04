@@ -159,6 +159,29 @@ module alu_test();
 		end
 	 end
 	 
+	 //run addition on all possible valid inputs
+	 OP = ADD;
+	 for(A = 8'd0; A < 8'd8; A = A + 8'd1) begin
+		for (B = 8'd0; B < 8'd8; B = B + 8'd1) begin
+			#100
+			if (~(Y == (A + B))) begin
+				$display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 82), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 1), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+			end
+		end
+	 end
+	 
+	 //run addition on all possible valid inputs
+	 OP = SUB;
+	 for(A = 8'd0; A < 8'd8; A = A + 8'd1) begin
+		for (B = 8'd0; B < 8'd8; B = B + 8'd1) begin
+			#100
+			if (~(Y == (A - B))) begin
+				$display("MSIM> ERROR: AND (OP = %3b) is incorrect for A = %2h, B = %2h: Y = %2h (should be 82), C = %1b (should be 0), V = %1b (should be 0), N = %1b (should be 1), Z = %1b (should be 0)", OP, A, B, Y, C, V, N, Z);
+			end
+		end
+	 end
+	 
+	 
 	 // ****** 1. TEST ADD ******
 	 // Add: Check V=1 for proper overflow (add 2 positive), C=0 for carry out, N=1 for negative, Z!=0
 	 
