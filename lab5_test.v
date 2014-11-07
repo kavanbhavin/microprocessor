@@ -83,6 +83,7 @@ module lab5_test();
   //   10 ticks (10 ns) into simulation, and each clock cycle lasts for
   //   20 ticks (20 ns)
   initial begin
+  $dumpvars;
     CLK50 = 1'b0;
     forever begin
       #10
@@ -104,7 +105,7 @@ module lab5_test();
   //   test bench doesn't run forever...
   initial begin 
     finalPC = 8'd254;
-    #50000 $stop;
+    #50000 $finish;
   end 
 
 
@@ -429,7 +430,7 @@ module lab5_test();
     endcase
 
     if(PC == finalPC) begin
-        $stop;
+        $finish;
     end
 
     $display("MSIM> ");
@@ -460,10 +461,10 @@ module lab5_test();
   task check_imm (input [7:0] ss, st, dataa, datac);
     begin
       if(`CHECK) begin
-        if(ss != dataa) begin
+        if(ss !== dataa) begin
           $display("MSIM> ERROR: Source Reg RS = %3d, expecting %3d", dataa, ss);
         end
-        if(st != datac) begin
+        if(st !== datac) begin
           $display("MSIM> ERROR: Dest Reg RT = %3d, expecting %3d", datac, st);
         end
       end
@@ -474,8 +475,8 @@ module lab5_test();
   task check_branch (input [7:0] ss, st, dataa, datab);
     begin
       if(`CHECK) begin   
-        if(ss != dataa) $display("MSIM> ERROR: Source Reg RS = %3d, expecting %3d", dataa, ss);
-        if(st != datab) $display("MSIM> ERROR: Source Reg RT = %3d, expecting %3d", datab, st);
+        if(ss !== dataa) $display("MSIM> ERROR: Source Reg RS = %3d, expecting %3d", dataa, ss);
+        if(st !== datab) $display("MSIM> ERROR: Source Reg RT = %3d, expecting %3d", datab, st);
       end
     end
   endtask
@@ -483,7 +484,7 @@ module lab5_test();
   
   task write_mem(input [7:0] DataD, DataB);
     begin
-      case(sDataD)
+      casex(sDataD)
         8'd248: $display("MSIM> ERROR: Address %3d is READ ONLY", DataD);
         8'd249: $display("MSIM> ERROR: Address %3d is READ ONLY", DataD);
         8'd250: $display("MSIM> Output on IOC of %2h", DataB);
@@ -504,11 +505,11 @@ module lab5_test();
   
   function [7:0] read_mem(input [7:0] DataD);
     begin
-      if(DataD == 8'd248) begin
+      if(DataD === 8'd248) begin
         read_mem = IOA;
         $display("MSIM> INPUT on IOA of %2h", IOA);
       end
-      else if(DataD == 8'd249) begin
+      else if(DataD === 8'd249) begin
         read_mem = IOB;
         $display("MSIM> INPUT on IOB of %2h", IOB);
       end

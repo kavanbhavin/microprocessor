@@ -35,66 +35,60 @@ module register_file(SA, SB, LD, CLK, DR, D_in, DATA_A, DATA_B);
 		.IN6(OUTS[6]),
 		.IN7(OUTS[7]),
 		.SELECT(SB),
-		.OUT(DATA_A)
-	);
-	
-	decoder register_decoder(
-		.DR(DR),
-		.LD(LD),
-		.Y(Y)
-	);
+		.OUT(DATA_B)
+	);	
 	
 	flip_flop f0(
-		.LD(Y[0]), 
+		.LD((DR == 3'd0) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
 		.OUT(OUTS[0])
 	);
 
 	flip_flop f1(
-		.LD(Y[1]), 
+		.LD((DR == 3'd1) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
 		.OUT(OUTS[1])
 	);
 
 	flip_flop f2(
-		.LD(Y[2]), 
+		.LD((DR == 3'd2) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
 		.OUT(OUTS[2])
 	);
 
 	flip_flop f3(
-		.LD(Y[3]), 
+		.LD((DR == 3'd3) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
 		.OUT(OUTS[3])
 	);
 
 	flip_flop f4(
-		.LD(Y[4]), 
+		.LD((DR == 3'd4) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
 		.OUT(OUTS[4])
 	);
 
 	flip_flop f5(
-		.LD(Y[5]), 
+		.LD((DR == 3'd5) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
 		.OUT(OUTS[5])
 	);
 
 	flip_flop f6(
-		.LD(Y[6]), 
+		.LD((DR == 3'd6) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
 		.OUT(OUTS[6])
 	);
 	
 	flip_flop f7(
-		.LD(Y[7]), 
+		.LD((DR == 3'd7) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
 		.OUT(OUTS[7])

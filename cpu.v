@@ -18,8 +18,16 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   reg [7:0] NextPC;
   
   reg MW;
-  
-  
+  reg MB;
+  reg MD;
+  wire [7:0] B_in;
+  wire [7:0] SIGN_EXTEND;
+  reg [5:0] IMM;
+  reg [2:0] SA;
+  reg [2:0] SB;
+  reg LD;
+  reg [2:0] DR;
+  reg [3:0] FS;
   
   // ADD YOUR CODE BELOW THIS LINE
   always @ (posedge CLK) begin
@@ -27,9 +35,146 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 		else PC <= NextPC;
   end
   
+  register_file rfile(
+  .SA(SA), 
+  .SB(SB), 
+  .LD(LD), 
+  .CLK(CLK), 
+  .DR(DR), 
+  .D_in(DataC), 
+  .DATA_A(DataA), 
+  .DATA_B(DataB)
+  ); 
+  
+  two_to_one_mux zardoz(
+  .I0(DataB), 
+  .I1(SIGN_EXTEND), 
+  .SELECT(MB), 
+  .DATA(B_in)
+  );
+  
+  two_to_one_mux whoareu(
+	.I0(DataD),
+	.I1(Din),
+	.SELECT(MD),
+	.DATA(DataC)
+  );
+  
+  alu aloo(
+  .A(DataA), 
+  .B(B_in), 
+  .OP(FS), 
+  .Y(), 
+  .C(), 
+  .V(), 
+  .N(), 
+  .Z()
+  );
+  
+  sign_extend sine(
+	.IMM(IMM),
+	.OUTPUT(SIGN_EXTEND)
+  );
+  
   always@(*) begin
-		//set NextPC to stuff here.
-		
+		case(Iin[15:12])
+			4'd0: begin
+				DR = Iin[5:3];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = 6'd0;
+				MB = 1'b0;
+				FS = Iin[2:0];
+				MD = 1'b0;
+				LD = 1'b0;
+				MW = 1'b0;
+				NextPC = PC + 8'd2;
+			end
+			4'b1111: begin
+				DR = Iin[5:3];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = 6'd0;
+				MB = 1'b0;
+				FS = Iin[2:0];
+				MD = 1'b0;
+				LD = 1'b1;
+				MW = 1'b0;
+				NextPC = PC + 8'd2;
+			end
+			4'b0010: begin
+				DR = Iin[8:6];
+				SA = Iin[11:9];
+				SB = 2'd0;
+				IMM = Iin[5:0];
+				MB = 1'b1;
+				FS = 3'd0;
+				MD = 1'b1;
+				LD = 1'b1;
+				MW = 1'b0;
+				NextPC = PC + 8'd2;
+			end
+			4'b0100: begin
+				DR = 3'd0;
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = Iin[5:0];
+				MB = 1'b1;
+				FS = 3'd0;
+				MD = 1'b0;
+				LD = 1'b0;
+				MW = 1'b1;
+				NextPC = PC + 8'd2;
+			end
+			4'b0101: begin
+				DR = Iin[8:6];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = Iin[5:0];
+				MB = 1'b1;
+				FS = 3'd0;
+				MD = 1'b0;
+				LD = 1'b1;
+				MW = 1'b0;
+				NextPC = PC + 8'd2;
+			end
+			4'b0110: begin
+				DR = Iin[8:6];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = Iin[5:0];
+				MB = 1'b1;
+				FS = 3'b101;
+				MD = 1'b0;
+				LD = 1'b1;
+				MW = 1'b0;
+				NextPC = PC + 8'd2;
+			end
+			4'b0111: begin
+				DR = Iin[8:6];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = Iin[5:0];
+				MB = 1'b1;
+				FS = 3'b110;
+				MD = 1'b0;
+				LD = 1'b1;
+				MW = 1'b0;
+				NextPC = PC + 8'd2;
+			end
+			default: begin
+				DR = Iin[5:3];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = 6'd0;
+				MB = 1'b0;
+				FS = Iin[2:0];
+				MD = 1'b0;
+				LD = 1'b0;
+				MW = 1'b0;
+				NextPC = PC + 8'd2;
+			end
+		endcase
   end
   
   
