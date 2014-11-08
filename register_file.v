@@ -1,4 +1,4 @@
-module register_file(SA, SB, LD, CLK, DR, D_in, DATA_A, DATA_B);
+module register_file(RESET, SA, SB, LD, CLK, DR, D_in, DATA_A, DATA_B);
 
 	input LD;
 	input [2:0] SA;
@@ -6,34 +6,42 @@ module register_file(SA, SB, LD, CLK, DR, D_in, DATA_A, DATA_B);
 	input [2:0] DR;
 	input CLK;
 	input [7:0] D_in;
+	input RESET;
+	output [7:0] DATA_A;
+	output [7:0] DATA_B;
+	wire [7:0] OUTS_0;
+	wire [7:0] OUTS_1;
+	wire [7:0] OUTS_2;
+	wire [7:0] OUTS_3;
+	wire [7:0] OUTS_4;
+	wire [7:0] OUTS_5;
+	wire [7:0] OUTS_6;
+	wire [7:0] OUTS_7;
 	
-	output DATA_A;
-	output DATA_B;
-	wire [7:0] OUTS;
 	wire [7:0] Y;
 	
 	eight_to_one_mux dat_a(
-		.IN0(OUTS[0]),
-		.IN1(OUTS[1]),
-		.IN2(OUTS[2]),
-		.IN3(OUTS[3]),
-		.IN4(OUTS[4]),
-		.IN5(OUTS[5]),
-		.IN6(OUTS[6]),
-		.IN7(OUTS[7]),
+		.IN0(OUTS_0),
+		.IN1(OUTS_1),
+		.IN2(OUTS_2),
+		.IN3(OUTS_3),
+		.IN4(OUTS_4),
+		.IN5(OUTS_5),
+		.IN6(OUTS_6),
+		.IN7(OUTS_7),
 		.SELECT(SA),
 		.OUT(DATA_A)
 	);
 	
 	eight_to_one_mux dat_b(
-		.IN0(OUTS[0]),
-		.IN1(OUTS[1]),
-		.IN2(OUTS[2]),
-		.IN3(OUTS[3]),
-		.IN4(OUTS[4]),
-		.IN5(OUTS[5]),
-		.IN6(OUTS[6]),
-		.IN7(OUTS[7]),
+		.IN0(OUTS_0),
+		.IN1(OUTS_1),
+		.IN2(OUTS_2),
+		.IN3(OUTS_3),
+		.IN4(OUTS_4),
+		.IN5(OUTS_5),
+		.IN6(OUTS_6),
+		.IN7(OUTS_7),
 		.SELECT(SB),
 		.OUT(DATA_B)
 	);	
@@ -42,56 +50,64 @@ module register_file(SA, SB, LD, CLK, DR, D_in, DATA_A, DATA_B);
 		.LD((DR == 3'd0) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
-		.OUT(OUTS[0])
+		.RESET(RESET),
+		.OUT(OUTS_0)
 	);
 
 	flip_flop f1(
 		.LD((DR == 3'd1) & LD ), 
 		.D(D_in), 
-		.CLK(CLK), 
-		.OUT(OUTS[1])
+		.CLK(CLK),
+		.RESET(RESET),
+		.OUT(OUTS_1)
 	);
 
 	flip_flop f2(
 		.LD((DR == 3'd2) & LD ), 
 		.D(D_in), 
-		.CLK(CLK), 
-		.OUT(OUTS[2])
+		.CLK(CLK),
+		.RESET(RESET),
+		.OUT(OUTS_2)
 	);
 
 	flip_flop f3(
 		.LD((DR == 3'd3) & LD ), 
 		.D(D_in), 
-		.CLK(CLK), 
-		.OUT(OUTS[3])
+		.CLK(CLK),
+		.RESET(RESET),
+		.OUT(OUTS_3)
 	);
 
 	flip_flop f4(
 		.LD((DR == 3'd4) & LD ), 
 		.D(D_in), 
-		.CLK(CLK), 
-		.OUT(OUTS[4])
+		.CLK(CLK),
+		.RESET(RESET),
+		.OUT(OUTS_4)
 	);
 
 	flip_flop f5(
 		.LD((DR == 3'd5) & LD ), 
 		.D(D_in), 
 		.CLK(CLK), 
-		.OUT(OUTS[5])
+		.RESET(RESET),
+		.OUT(OUTS_5)
 	);
 
 	flip_flop f6(
 		.LD((DR == 3'd6) & LD ), 
 		.D(D_in), 
-		.CLK(CLK), 
-		.OUT(OUTS[6])
+		.CLK(CLK),
+		.RESET(RESET),
+		.OUT(OUTS_6)
 	);
 	
 	flip_flop f7(
 		.LD((DR == 3'd7) & LD ), 
 		.D(D_in), 
-		.CLK(CLK), 
-		.OUT(OUTS[7])
+		.CLK(CLK),
+		.RESET(RESET),
+		.OUT(OUTS_7)
 	);
 
 	endmodule

@@ -18,6 +18,8 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   reg [7:0] NextPC;
   
   reg MW;
+  
+  // ADD YOUR CODE BELOW THIS LINE
   reg MB;
   reg MD;
   wire [7:0] B_in;
@@ -28,8 +30,6 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   reg LD;
   reg [2:0] DR;
   reg [3:0] FS;
-  
-  // ADD YOUR CODE BELOW THIS LINE
   always @ (posedge CLK) begin
 		if(RESET) PC <= 8'd0;
 		else PC <= NextPC;
@@ -43,6 +43,7 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   .DR(DR), 
   .D_in(DataC), 
   .DATA_A(DataA), 
+  .RESET(RESET),
   .DATA_B(DataB)
   ); 
   
@@ -64,11 +65,7 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   .A(DataA), 
   .B(B_in), 
   .OP(FS), 
-  .Y(DataD), 
-  .C(), 
-  .V(), 
-  .N(), 
-  .Z()
+  .Y(DataD)
   );
   
   sign_extend sine(
