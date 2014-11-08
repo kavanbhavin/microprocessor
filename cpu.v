@@ -64,7 +64,7 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   .A(DataA), 
   .B(B_in), 
   .OP(FS), 
-  .Y(), 
+  .Y(DataD), 
   .C(), 
   .V(), 
   .N(), 
