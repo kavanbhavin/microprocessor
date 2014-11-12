@@ -20,6 +20,9 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   reg MW;
   
   // ADD YOUR CODE BELOW THIS LINE
+  wire HALT;
+  wire H;
+  assign HALT = ((Iin[15:12]==4'd0) && (Iin[2:0]==3'b001)) ? 1'b1 : 1'b0;
   reg MB;
   reg MD;
   wire [7:0] B_in;
@@ -30,10 +33,18 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   reg LD;
   reg [2:0] DR;
   reg [3:0] FS;
+  
   always @ (posedge CLK) begin
 		if(RESET) PC <= 8'd0;
+		else if(H) PC <=PC;
 		else PC <= NextPC;
   end
+  
+  halt_logic kandisa(
+	.EN_L(EN_L),
+	.HALT(HALT),
+	.H(H)
+  );
   
   register_file rfile(
   .SA(SA), 
