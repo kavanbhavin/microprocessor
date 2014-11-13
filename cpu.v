@@ -43,7 +43,8 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   halt_logic kandisa(
 	.EN_L(EN_L),
 	.HALT(HALT),
-	.H(H)
+	.H(H),
+	.CLK(CLK)
   );
   
   register_file rfile(

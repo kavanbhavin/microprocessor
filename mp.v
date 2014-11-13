@@ -5,7 +5,7 @@ module mp(Z, NZ, N, NN, BS, MP);
 	input NN;
 	input [2:0] BS;
 	output MP;
-	
+	reg MP;
 	always@(*) begin
 		case(BS)
 			3'd0: begin
@@ -18,9 +18,11 @@ module mp(Z, NZ, N, NN, BS, MP);
 				MP = N;
 			end
 			3'd3: begin
-				NP = NN;
+				MP = NN;
 			end
 			default: begin
-				NP = 1'b0;
+				MP = 1'b0;
 			end
+	endcase
 	end
+endmodule
