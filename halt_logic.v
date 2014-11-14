@@ -6,23 +6,12 @@ module halt_logic(CLK, HALT, EN_L, H);
 	reg H;
 	reg prev_enable;
 	always@(posedge CLK)begin
-		if(~HALT) begin
-			H <= 1'b0;
-			prev_enable <= EN_L;
-		end
+	prev_enable <= EN_L;
+		if(~HALT) H<=1'b0;
 		else if(~EN_L) begin
-			if(prev_enable) begin
-				H <= 1'b0;
-				prev_enable <= EN_L;
-			end
-			else begin
-				H<= 1'b1;
-				prev_enable <= EN_L;
-			end
+			if(prev_enable) H <= 1'b0;
+			else H<= 1'b1;
 		end
-		else begin
-			prev_enable <= EN_L;
-			H <= 1'b1;
-		end
+		else H <= 1'b1;
 	end
 endmodule
