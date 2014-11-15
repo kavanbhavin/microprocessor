@@ -20,11 +20,15 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   reg MW;
   
   // ADD YOUR CODE BELOW THIS LINE
+  wire Z;
+  wire N;
   wire HALT;
   wire H;
   assign HALT = ((Iin[15:12]==4'd0) && (Iin[2:0]==3'b001)) ? 1'b1 : 1'b0;
   reg MB;
   reg MD;
+  wire MP;
+  reg [2:0] BS;
   wire [7:0] B_in;
   wire [7:0] SIGN_EXTEND;
   reg [5:0] IMM;
@@ -33,6 +37,7 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   reg LD;
   reg [2:0] DR;
   reg [3:0] FS;
+  wire [7:0] INCREMENT_SUM;
   
   always @ (posedge CLK) begin
 		if(RESET) PC <= 8'd0;
@@ -40,6 +45,18 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 		else PC <= NextPC;
   end
   
+  always @ (*) begin
+  		if(MP) NextPC = INCREMENT_SUM;
+  		else NextPC = PC +8'd2;
+  end
+
+  adder fa(
+  	.A(PC+8'd2),
+  	.B({SIGN_EXTEND[6:0], 1'b0}),
+  	.CI(1'b0),
+  	.Y(INCREMENT_SUM)
+  	);
+
   halt_logic kandisa(
 	.EN_L(EN_L),
 	.HALT(HALT),
@@ -77,7 +94,9 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
   .A(DataA), 
   .B(B_in), 
   .OP(FS), 
-  .Y(DataD)
+  .Y(DataD),
+  .Z(Z),
+  .N(N)
   );
   
   sign_extend sine(
@@ -85,9 +104,19 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 	.OUTPUT(SIGN_EXTEND)
   );
   
+  mp branch(
+   .Z(Z), 
+	.NZ(~Z), 
+	.N(N), 
+	.NN(~N), 
+	.BS(BS), 
+	.MP(MP)
+  );
+  
   always@(*) begin
 		case(Iin[15:12])
 			4'd0: begin
+			//NOP
 				DR = Iin[5:3];
 				SA = Iin[11:9];
 				SB = Iin[8:6];
@@ -97,9 +126,10 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MD = 1'b0;
 				LD = 1'b0;
 				MW = 1'b0;
-				NextPC = PC + 8'd2;
+				BS = 3'd4;
 			end
 			4'b1111: begin
+				BS = 3'd4;
 				DR = Iin[5:3];
 				SA = Iin[11:9];
 				SB = Iin[8:6];
@@ -109,9 +139,9 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MD = 1'b0;
 				LD = 1'b1;
 				MW = 1'b0;
-				NextPC = PC + 8'd2;
 			end
 			4'b0010: begin
+				BS = 3'd4;
 				DR = Iin[8:6];
 				SA = Iin[11:9];
 				SB = 2'd0;
@@ -121,9 +151,9 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MD = 1'b1;
 				LD = 1'b1;
 				MW = 1'b0;
-				NextPC = PC + 8'd2;
 			end
 			4'b0100: begin
+				BS = 3'd4;
 				DR = 3'd0;
 				SA = Iin[11:9];
 				SB = Iin[8:6];
@@ -133,9 +163,9 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MD = 1'b0;
 				LD = 1'b0;
 				MW = 1'b1;
-				NextPC = PC + 8'd2;
 			end
 			4'b0101: begin
+				BS = 3'd4;
 				DR = Iin[8:6];
 				SA = Iin[11:9];
 				SB = Iin[8:6];
@@ -145,9 +175,9 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MD = 1'b0;
 				LD = 1'b1;
 				MW = 1'b0;
-				NextPC = PC + 8'd2;
 			end
 			4'b0110: begin
+				BS = 3'd4;
 				DR = Iin[8:6];
 				SA = Iin[11:9];
 				SB = Iin[8:6];
@@ -157,9 +187,9 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MD = 1'b0;
 				LD = 1'b1;
 				MW = 1'b0;
-				NextPC = PC + 8'd2;
 			end
 			4'b0111: begin
+				BS = 3'd4;
 				DR = Iin[8:6];
 				SA = Iin[11:9];
 				SB = Iin[8:6];
@@ -169,9 +199,61 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MD = 1'b0;
 				LD = 1'b1;
 				MW = 1'b0;
-				NextPC = PC + 8'd2;
+			end
+			4'b1000: begin
+				//BEQ
+				BS = 3'd0;
+				DR=Iin[8:6];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = Iin[5:0];
+				MB = 1'b0;
+				FS = 3'b001;
+				MD = 1'b0;
+				LD = 1'b0;
+				MW = 1'b0;
+			end
+			4'b1001: begin
+				//BNE
+				BS = 3'd1;
+				DR=Iin[8:6];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = Iin[5:0];
+				MB = 1'b0;
+				FS = 3'b001;
+				MD = 1'b0;
+				LD = 1'b0;
+				MW = 1'b0;
+			end
+			4'b1010: begin
+				//BGEZ
+				BS = 3'd2;
+				DR=Iin[8:6];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = Iin[5:0];
+				MB = 1'b0;
+				FS = 3'b010;
+				MD = 1'b0;
+				LD = 1'b0;
+				MW = 1'b0;
+			end
+			4'b1011: begin
+				//BNE
+				BS = 3'd3;
+				DR=Iin[8:6];
+				SA = Iin[11:9];
+				SB = Iin[8:6];
+				IMM = Iin[5:0];
+				MB = 1'b0;
+				FS = 3'b010;
+				MD = 1'b0;
+				LD = 1'b0;
+				MW = 1'b0;
 			end
 			default: begin
+				BS = 3'd4;
 				DR = Iin[5:3];
 				SA = Iin[11:9];
 				SB = Iin[8:6];
@@ -181,7 +263,6 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MD = 1'b0;
 				LD = 1'b0;
 				MW = 1'b0;
-				NextPC = PC + 8'd2;
 			end
 		endcase
   end
