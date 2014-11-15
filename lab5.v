@@ -51,7 +51,7 @@ module lab5(CLK50, RESET, CLK_SEL, IOA, IOB, EN_L, CLK, PC, NextPC, Iin, DataA, 
   );
     
   // BELOW IS THE ONLY LINE YOU SHOULD HAVE TO MODIFY IN THIS FILE
-  lab5iram leProgramToRun(
+  lab5iram1A leProgramToRun(
     .CLK(CLK),
     .RESET(RESET),
     .ADDR(PC),
