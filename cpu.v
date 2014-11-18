@@ -228,8 +228,8 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 			end
 			4'b1010: begin
 				//BGEZ
-				BS = 3'd2;
-				DR=Iin[8:6];
+				BS = 3'd3;
+				DR= Iin[8:6];
 				SA = Iin[11:9];
 				SB = Iin[8:6];
 				IMM = Iin[5:0];
@@ -240,8 +240,8 @@ module cpu(CLK, RESET, EN_L, Iin, Din, PC, NextPC, DataA, DataB, DataC, DataD, M
 				MW = 1'b0;
 			end
 			4'b1011: begin
-				//BNE
-				BS = 3'd3;
+				//BLTZ
+				BS = 3'd2;
 				DR=Iin[8:6];
 				SA = Iin[11:9];
 				SB = Iin[8:6];
